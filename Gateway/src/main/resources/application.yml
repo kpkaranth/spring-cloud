@@ -1,0 +1,23 @@
+server:
+  port: ${PORT:8085}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8889/eureka
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      default-filters:
+        - RewritePath=/(?<base>.*?)/(?<segment>.*), /$\{segment}
+      routes:
+        - id: ProductManagement
+          uri: lb://ProductManagement
+          predicates:
+            - Path=/ProductManagement/**
+
+#          filters:
+#            - RewritePath=/order-service(?<segment>/?.*), $\{segment}
+#              The above will replace /order-service/order with /order
